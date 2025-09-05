@@ -14,6 +14,7 @@ import '../services/suggestion_service.dart';
 import '../services/notification_service.dart';
 import '../widgets/task_card.dart';
 import '../widgets/quick_add_sheet.dart';
+import '../widgets/spark_badge.dart';
 import '../app/theme/color_schemes.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -224,7 +225,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
                                     borderRadius: BorderRadius.circular(16),
                                     border: Border.all(color: AppColors.surfaceDark2),
                                   ),
-                                  child: const Center(child: Icon(Icons.add, color: AppColors.textSecondaryDark)),
+                                  child: const Center(child: _EmptySpark()),
                                 );
                               }, childCount: columns * 2),
                             );
@@ -310,6 +311,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
           child: const Icon(Icons.add),
         ),
       ),
+    );
+  }
+}
+
+class _EmptySpark extends StatelessWidget {
+  const _EmptySpark();
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SparkBadge(size: 22, pulse: true),
+        const SizedBox(height: 8),
+        Text('Add a task', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondaryDark)),
+      ],
     );
   }
 }
