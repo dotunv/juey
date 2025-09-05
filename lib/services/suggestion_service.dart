@@ -208,18 +208,27 @@ Future<List<Suggestion>> generateSuggestionsV1(WidgetRef ref, {int limit = 8}) a
   // Candidates from patterns first
   final candidates = <String, _Candidate>{};
   final patternByTaskId = {for (final p in patterns) p.taskId: p};
+  final taskById = {for (final t in tasks) t.id: t};
+  final patternByTitle = <String, Pattern>{};
   for (final p in patterns) {
-    // find the task instance for this pattern's title (by its taskId, then dedupe by title)
-    final task = tasks.firstWhere((t) => t.id == p.taskId, orElse: () => tasks.firstWhere((t) => TextUtils.normalizeTitle(t.title) == TextUtils.normalizeTitle(tasks.firstWhere((tt) => tt.id == p.taskId).title), orElse: () => tasks.first));
+    final t = taskById[p.taskId];
+    if (t == null) continue;
+    final key = TextUtils.normalizeTitle(t.title);
+    patternByTitle[key] = p;
+  }
+  for (final p in patterns) {
+    final task = taskById[p.taskId];
+    if (task == null) continue;
     final key = TextUtils.normalizeTitle(task.title);
     final hist = grouped[key] ?? [];
     final last = lastDoneByTitle[key] ?? (task.completedAt ?? task.createdAt);
     if (isToday(last)) continue; // exclude tasks completed today
+    final mostRecent = hist.isNotEmpty
+        ? hist.reduce((a, b) => ((a.completedAt ?? a.createdAt).isAfter(b.completedAt ?? b.createdAt)) ? a : b)
+        : task;
     candidates[key] = _Candidate(
       normalizedTitle: key,
-      task: hist.isNotEmpty
-          ? hist.reduce((a, b) => ((a.completedAt ?? a.createdAt).isAfter(b.completedAt ?? b.createdAt)) ? a : b)
-          : task,
+      task: mostRecent,
       lastDone: last,
       pattern: p,
       history: hist,
@@ -243,7 +252,7 @@ Future<List<Suggestion>> generateSuggestionsV1(WidgetRef ref, {int limit = 8}) a
       normalizedTitle: key,
       task: mostRecent,
       lastDone: last,
-      pattern: patternByTaskId[mostRecent.id],
+      pattern: patternByTitle[key],
       history: hist,
     );
   }
