@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'color_schemes.dart';
 
 class AppTextTheme {
   static TextTheme get lightTextTheme {
-    return TextTheme(
+    return const TextTheme(
       displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
       displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
       headlineMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
@@ -14,8 +15,8 @@ class AppTextTheme {
 
   static TextTheme get darkTextTheme {
     return lightTextTheme.apply(
-      bodyColor: Colors.white,
-      displayColor: Colors.white,
+      bodyColor: AppColors.textPrimaryDark,
+      displayColor: AppColors.textPrimaryDark,
     );
   }
 }

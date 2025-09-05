@@ -1,38 +1,49 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // 🌞 Light Theme
-  static const lightColorScheme = ColorScheme.light(
-    primary: Color(0xFF7986CB),          // Soft indigo for focus
-    primaryContainer: Color(0xFFE8EAF6), // Light lavender background
-    secondary: Color(0xFF81C784),        // Soft green for AI freshness
-    secondaryContainer: Color(0xFFE8F5E8),
-    surface: Color(0xFFFFFFFF),
-    error: Color(0xFFE53935),
-    onPrimary: Color(0xFFFFFFFF),
-    onSecondary: Color(0xFF00332A),
-    onSurface: Color(0xFF1A1C1E),
-    onError: Color(0xFFFFFFFF),
+  // Brand palette
+  static const accent = Color(0xFFFFCB47); // spark
+  static const backgroundDark = Color(0xFF0E0E0E);
+  static const surfaceDark = Color(0xFF1A1A1A);
+  static const surfaceDark2 = Color(0xFF2B2B2B);
+  static const textPrimaryDark = Color(0xFFEDEDED);
+  static const textSecondaryDark = Color(0xFF9C9C9C);
+
+  // Light Theme (kept minimal, accent-forward)
+  static final lightColorScheme = ColorScheme.light(
+    primary: accent,
+    primaryContainer: const Color(0xFFFFE7A3),
+    secondary: accent,
+    secondaryContainer: const Color(0xFFFFF2CC),
+    surface: Colors.white,
+    background: Colors.white,
+    error: const Color(0xFFE53935),
+    onPrimary: Colors.black,
+    onSecondary: Colors.black,
+    onSurface: Colors.black,
+    onBackground: Colors.black,
+    onError: Colors.white,
     brightness: Brightness.light,
   );
 
-  // 🌙 Dark Theme
-  static const darkColorScheme = ColorScheme.dark(
-    primary: Color(0xFF9FA8DA),          // Soft blue
-    primaryContainer: Color(0xFF303F9F), // Darker indigo
-    secondary: Color(0xFF81C784),        // Soft green
-    secondaryContainer: Color(0xFF1B5E20),
-    surface: Color(0xFF121212),
+  // Dark Theme (brand: dark grid + spark accent)
+  static final darkColorScheme = const ColorScheme.dark(
+    primary: accent,
+    primaryContainer: surfaceDark2,
+    secondary: accent,
+    secondaryContainer: surfaceDark,
+    surface: surfaceDark,
+    background: backgroundDark,
     error: Color(0xFFEF5350),
-    onPrimary: Color(0xFF0B132B),
-    onSecondary: Color(0xFF00332A),
-    onSurface: Color(0xFFE5E5E5),
-    onError: Color(0xFF000000),
-    brightness: Brightness.dark,
+    onPrimary: Colors.black,
+    onSecondary: Colors.black,
+    onSurface: textPrimaryDark,
+    onBackground: textPrimaryDark,
+    onError: Colors.black,
   );
 
-  // 🔹 Semantic aliases (easier to use across features)
-  static Color get success => const Color(0xFF22C55E); // green
-  static Color get warning => const Color(0xFFF59E42); // orange
-  static Color get info => const Color(0xFF38BDF8);    // sky blue
+  // Semantic aliases
+  static Color get success => const Color(0xFF22C55E);
+  static Color get warning => const Color(0xFFF59E42);
+  static Color get info => const Color(0xFF38BDF8);
 }
