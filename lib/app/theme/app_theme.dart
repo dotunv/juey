@@ -21,7 +21,7 @@ class AppTheme {
         ),
         filled: true,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        labelStyle: TextStyle(color: AppColors.lightColorScheme.onSurface.withValues(alpha: 0.6)),
+        labelStyle: TextStyle(color: AppColors.lightColorScheme.onSurface.withOpacity(0.6)),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -47,7 +47,7 @@ class AppTheme {
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.lightColorScheme.surface,
         selectedItemColor: AppColors.lightColorScheme.primary,
-        unselectedItemColor: AppColors.lightColorScheme.onSurface.withValues(alpha: 0.6),
+        unselectedItemColor: AppColors.lightColorScheme.onSurface.withOpacity(0.6),
       ),
       chipTheme: ChipThemeData(
         backgroundColor: AppColors.lightColorScheme.secondaryContainer,
