@@ -7,14 +7,12 @@ import 'package:timezone/timezone.dart' as tz;
 import '../models/suggestion.dart';
 import '../models/task.dart';
 import '../models/pattern.dart';
-import '../providers/suggestion_provider.dart';
 import '../providers/pattern_provider.dart';
-import '../providers/task_provider.dart';
 import '../utils/text_utils.dart';
 import '../utils/time_context.dart';
 import '../utils/feedback_prefs.dart';
 
-Future<void> generateSuggestions(WidgetRef ref) async {
+Future<void> generateSuggestions(Ref ref) async {
   await generateSuggestionsV1(ref);
 }
 
@@ -162,7 +160,7 @@ String _buildReason({
   return top2.join(' • ');
 }
 
-Future<List<Suggestion>> generateSuggestionsV1(WidgetRef ref, {int limit = 8}) async {
+Future<(List<Suggestion>, Map<String, String>)> generateSuggestionsV1(Ref ref, {int limit = 8}) async {
   final client = Supabase.instance.client;
   final userId = client.auth.currentUser!.id;
   final loc = tz.local;
@@ -197,7 +195,7 @@ Future<List<Suggestion>> generateSuggestionsV1(WidgetRef ref, {int limit = 8}) a
       final dt = t.completedAt ?? t.createdAt;
       if (last == null || dt.isAfter(last)) last = dt;
     }
-    if (last != null) lastDoneByTitle[entry.key] = last!;
+    if (last != null) lastDoneByTitle[entry.key] = last;
   }
 
   bool isToday(DateTime dt) {
@@ -347,10 +345,6 @@ Future<List<Suggestion>> generateSuggestionsV1(WidgetRef ref, {int limit = 8}) a
   for (int i = 0; i < suggestions.length; i++) {
     reasonsMap[suggestions[i].id] = top[i].reason;
   }
-  ref.read(suggestionReasonsProvider.notifier).state = reasonsMap;
 
-  // Update list provider state
-  ref.read(suggestionListProvider.notifier).setSuggestions(suggestions);
-
-  return suggestions;
+  return (suggestions, reasonsMap);
 }

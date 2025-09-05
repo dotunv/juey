@@ -30,7 +30,8 @@ class SuggestionNotifier extends StateNotifier<AsyncValue<List<Suggestion>>> {
   Future<void> refreshTopSuggestions({int limit = 8}) async {
     try {
       state = const AsyncValue.loading();
-      final suggestions = await svc.generateSuggestionsV1(ref, limit: limit);
+      final (suggestions, reasonsMap) = await svc.generateSuggestionsV1(ref, limit: limit);
+      ref.read(suggestionReasonsProvider.notifier).state = reasonsMap;
       state = AsyncValue.data(suggestions);
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);

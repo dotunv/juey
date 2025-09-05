@@ -31,7 +31,7 @@ class FeedbackPrefs {
     final prev = prefs.getDouble(key) ?? 1.0;
     final delta = accepted ? 0.05 : -0.05;
     final next = (prev + delta).clamp(0.8, 1.2);
-    await prefs.setDouble(key, next as double);
+    await prefs.setDouble(key, next);
   }
 
   static Future<double> getGlobalMultiplier() async {

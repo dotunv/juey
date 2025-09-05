@@ -6,7 +6,6 @@ import '../models/task.dart';
 import '../providers/task_provider.dart';
 import '../providers/suggestion_provider.dart';
 import '../services/pattern_detection_service.dart';
-import '../services/suggestion_service.dart';
 import '../services/notification_service.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
