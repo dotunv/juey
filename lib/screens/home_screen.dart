@@ -69,6 +69,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
   Widget build(BuildContext context) {
     final taskAsync = ref.watch(taskListProvider);
     final suggestionAsync = ref.watch(suggestionListProvider);
+    final reasons = ref.watch(suggestionReasonsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -103,7 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
                               padding: const EdgeInsets.only(right: 20),
                               child: const Icon(Icons.close, color: Colors.white),
                             ),
-                            onDismissed: (direction) => ref.read(suggestionListProvider.notifier).acceptSuggestion(suggestion.id, false),
+                            onDismissed: (direction) => ref.read(suggestionListProvider.notifier).rejectSuggestion(suggestion.id),
                             child: Container(
                               width: 200,
                               margin: const EdgeInsets.only(right: 16),
@@ -128,17 +129,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
                                       ),
                                       const SizedBox(height: 8),
                                       Text('Confidence: ${(suggestion.confidence * 100).toInt()}%'),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        reasons[suggestion.id] ?? '',
+                                        style: const TextStyle(color: Colors.black54),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                       const Spacer(),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
                                           IconButton(
                                             icon: const Icon(Icons.check, color: Colors.green),
-                                            onPressed: () => ref.read(suggestionListProvider.notifier).acceptSuggestion(suggestion.id, true),
+                                            onPressed: () => ref.read(suggestionListProvider.notifier).acceptSuggestion(suggestion.id),
                                           ),
                                           IconButton(
                                             icon: const Icon(Icons.close, color: Colors.red),
-                                            onPressed: () => ref.read(suggestionListProvider.notifier).acceptSuggestion(suggestion.id, false),
+                                            onPressed: () => ref.read(suggestionListProvider.notifier).rejectSuggestion(suggestion.id),
                                           ),
                                         ],
                                       ),
@@ -219,7 +227,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with TickerProviderStat
           } else if (index == 2) {
             detectPatterns(ref);
           } else if (index == 3) {
-            generateSuggestions(ref);
+            ref.read(suggestionListProvider.notifier).refreshTopSuggestions();
           } else if (index == 4) {
             NotificationService.showNotification('Juey Reminder', 'Time for your daily task!');
           } else if (index == 5) {
