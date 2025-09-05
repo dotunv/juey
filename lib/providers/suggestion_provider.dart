@@ -6,7 +6,7 @@ import 'common_providers.dart';
 import '../utils/feedback_prefs.dart';
 import '../utils/text_utils.dart';
 import '../services/suggestion_service.dart' as svc;
-import 'task_provider.dart';
+import 'task_provider.dart' hide supabaseClientProvider;
 
 final suggestionReasonsProvider = StateProvider<Map<String, String>>((ref) => {});
 

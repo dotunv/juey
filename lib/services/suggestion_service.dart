@@ -78,7 +78,7 @@ double _frequencyWeight(String? freq) {
 
 (double, double) _timeMatchParts(List<DateTime> times, tz.Location loc, tz.TZDateTime now) {
   if (times.isEmpty) return (0.5, 0.5);
-  final buckets = <TimeContext.DayBucket, int>{};
+  final buckets = <DayBucket, int>{};
   int weekendCount = 0;
   for (final t in times) {
     final z = TimeContext.toTz(t, loc);
@@ -96,17 +96,17 @@ double _frequencyWeight(String? freq) {
   return (bucketScore, weekScore);
 }
 
-String _bucketLabel(TimeContext.DayBucket b) {
+String _bucketLabel(DayBucket b) {
   switch (b) {
-    case TimeContext.DayBucket.morning:
+    case DayBucket.morning:
       return 'morning';
-    case TimeContext.DayBucket.midday:
+    case DayBucket.midday:
       return 'midday';
-    case TimeContext.DayBucket.afternoon:
+    case DayBucket.afternoon:
       return 'afternoon';
-    case TimeContext.DayBucket.evening:
+    case DayBucket.evening:
       return 'evening';
-    case TimeContext.DayBucket.night:
+    case DayBucket.night:
       return 'night';
   }
 }
