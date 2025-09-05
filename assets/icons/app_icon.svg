@@ -1,0 +1,19 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- Background -->
+  <rect width="120" height="120" rx="24" fill="#0E0E0E"/>
+
+  <!-- Grid blocks -->
+  <rect x="28" y="28" width="20" height="20" rx="4" fill="#2B2B2B"/>
+  <rect x="50" y="28" width="20" height="20" rx="4" fill="#2B2B2B"/>
+  <rect x="72" y="28" width="20" height="20" rx="4" fill="#2B2B2B"/>
+  
+  <rect x="28" y="50" width="20" height="20" rx="4" fill="#2B2B2B"/>
+  <rect x="50" y="50" width="20" height="20" rx="4" fill="#2B2B2B"/>
+  <rect x="72" y="50" width="20" height="20" rx="4" fill="#2B2B2B"/>
+  
+  <rect x="28" y="72" width="20" height="20" rx="4" fill="#2B2B2B"/>
+  <rect x="50" y="72" width="20" height="20" rx="4" fill="#2B2B2B"/>
+
+  <!-- The intelligent “spark” block -->
+  <rect x="72" y="72" width="20" height="20" rx="4" fill="#FFCB47"/>
+</svg>
