@@ -17,8 +17,12 @@ class TagNotifier extends StateNotifier<AsyncValue<List<Tag>>> {
 
   Future<void> _loadTags() async {
     try {
-      final userId = client.auth.currentUser!.id;
-      final response = await client.from('tags').select().eq('user_id', userId);
+      final user = client.auth.currentUser;
+      if (user == null) {
+        state = const AsyncValue.data([]);
+        return;
+      }
+      final response = await client.from('tags').select().eq('user_id', user.id);
       final tags = response.map((json) => Tag.fromJson(json)).toList();
       state = AsyncValue.data(tags);
     } catch (e, stack) {
@@ -30,8 +34,8 @@ class TagNotifier extends StateNotifier<AsyncValue<List<Tag>>> {
     try {
       await client.from('tags').insert(tag.toJson());
       _loadTags();
-    } catch (e) {
-      // Handle error
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
   }
 
@@ -39,8 +43,8 @@ class TagNotifier extends StateNotifier<AsyncValue<List<Tag>>> {
     try {
       await client.from('tags').update(updatedTag.toJson()).eq('id', updatedTag.id);
       _loadTags();
-    } catch (e) {
-      // Handle error
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
   }
 
@@ -48,8 +52,8 @@ class TagNotifier extends StateNotifier<AsyncValue<List<Tag>>> {
     try {
       await client.from('tags').delete().eq('id', tagId);
       _loadTags();
-    } catch (e) {
-      // Handle error
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
   }
 }

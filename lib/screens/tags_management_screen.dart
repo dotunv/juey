@@ -65,12 +65,18 @@ class TagsManagementScreen extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () {
-              final userId = Supabase.instance.client.auth.currentUser!.id;
+              final user = Supabase.instance.client.auth.currentUser;
+              if (user == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Please sign in to add tags')),
+                );
+                return;
+              }
               final newTag = Tag(
                 id: '',
                 name: controller.text,
                 color: '#FF0000', // Default color
-                userId: userId,
+                userId: user.id,
               );
               ref.read(tagListProvider.notifier).addTag(newTag);
               Navigator.of(context).pop();

@@ -60,7 +60,13 @@ class _AddTaskDialogContentState extends State<AddTaskDialogContent> {
         ),
         TextButton(
           onPressed: () {
-            final userId = Supabase.instance.client.auth.currentUser!.id;
+            final user = Supabase.instance.client.auth.currentUser;
+            if (user == null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Please sign in to add tasks')),
+              );
+              return;
+            }
             final newTask = Task(
               id: '',
               title: titleController.text,
@@ -68,7 +74,7 @@ class _AddTaskDialogContentState extends State<AddTaskDialogContent> {
               tagIds: selectedTagIds,
               createdAt: DateTime.now(),
               isCompleted: false,
-              userId: userId,
+              userId: user.id,
             );
             widget.ref.read(taskListProvider.notifier).addTask(newTask);
             Navigator.of(context).pop();

@@ -67,7 +67,7 @@ class TaskCard extends StatelessWidget {
                           task.description!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: cs.onSurface.withOpacity(0.7)),
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: cs.onSurface.withValues(alpha: 0.7)),
                         ),
                       const Spacer(),
                       if (tagLabels.isNotEmpty)

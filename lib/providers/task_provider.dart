@@ -18,8 +18,12 @@ class TaskNotifier extends StateNotifier<AsyncValue<List<Task>>> {
 
   Future<void> _loadTasks() async {
     try {
-      final userId = client.auth.currentUser!.id;
-      final response = await client.from('tasks').select().eq('user_id', userId);
+      final user = client.auth.currentUser;
+      if (user == null) {
+        state = const AsyncValue.data([]);
+        return;
+      }
+      final response = await client.from('tasks').select().eq('user_id', user.id);
       final tasks = response.map((json) => Task.fromJson(json)).toList();
       state = AsyncValue.data(tasks);
     } catch (e, stack) {
@@ -31,8 +35,8 @@ class TaskNotifier extends StateNotifier<AsyncValue<List<Task>>> {
     try {
       await client.from('tasks').insert(task.toJson());
       _loadTasks(); // Refresh list
-    } catch (e) {
-      // Handle error, perhaps show snackbar
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
   }
 
@@ -40,8 +44,8 @@ class TaskNotifier extends StateNotifier<AsyncValue<List<Task>>> {
     try {
       await client.from('tasks').update(updatedTask.toJson()).eq('id', updatedTask.id);
       _loadTasks();
-    } catch (e) {
-      // Handle error
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
   }
 
@@ -49,8 +53,8 @@ class TaskNotifier extends StateNotifier<AsyncValue<List<Task>>> {
     try {
       await client.from('tasks').delete().eq('id', taskId);
       _loadTasks();
-    } catch (e) {
-      // Handle error
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
   }
 

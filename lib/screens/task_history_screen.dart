@@ -33,11 +33,11 @@ class _TaskHistoryScreenState extends ConsumerState<TaskHistoryScreen> {
       body: Column(
         children: [
           // Tag filter chips
-          if (tagAsync.hasValue)
-            Padding(
+          tagAsync.when(
+            data: (tags) => Padding(
               padding: const EdgeInsets.all(8.0),
               child: Wrap(
-                children: tagAsync.value!
+                children: tags
                     .map(
                       (tag) => FilterChip(
                         label: Text(tag.name),
@@ -56,6 +56,9 @@ class _TaskHistoryScreenState extends ConsumerState<TaskHistoryScreen> {
                     .toList(),
               ),
             ),
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
+          ),
           // Filtered tasks
           Expanded(
             child: taskAsync.when(

@@ -42,8 +42,9 @@ class SuggestionNotifier extends StateNotifier<AsyncValue<List<Suggestion>>> {
     try {
       await client.from('suggestions').update({'accepted': true}).eq('id', suggestionId);
       await _updateFeedbackForSuggestion(suggestionId, true);
-    } catch (e) {
-      // ignore
+    } catch (e, stack) {
+      // Silently fail - suggestions are non-critical
+      state = AsyncValue.error(e, stack);
     }
   }
 
@@ -51,8 +52,9 @@ class SuggestionNotifier extends StateNotifier<AsyncValue<List<Suggestion>>> {
     try {
       await client.from('suggestions').update({'accepted': false}).eq('id', suggestionId);
       await _updateFeedbackForSuggestion(suggestionId, false);
-    } catch (e) {
-      // ignore
+    } catch (e, stack) {
+      // Silently fail - suggestions are non-critical
+      state = AsyncValue.error(e, stack);
     }
   }
 
@@ -85,7 +87,7 @@ class SuggestionNotifier extends StateNotifier<AsyncValue<List<Suggestion>>> {
           'created_at': DateTime.now().toIso8601String(),
           'completed_at': null,
           'is_completed': false,
-          'user_id': row['user_id'] ?? client.auth.currentUser!.id,
+          'user_id': row['user_id'] ?? client.auth.currentUser?.id ?? '',
         });
       }
     }

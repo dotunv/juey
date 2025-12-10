@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SparkBadge extends StatefulWidget {
@@ -58,7 +57,7 @@ class _SparkBadgeState extends State<SparkBadge> with SingleTickerProviderStateM
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFFFFCB47).withOpacity(opacity),
+                  color: const Color(0xFFFFCB47).withValues(alpha: opacity),
                   blurRadius: glow,
                   spreadRadius: 0,
                 ),

@@ -15,7 +15,9 @@ Future<void> detectPatterns(WidgetRef ref) async {
     grouped.putIfAbsent(task.title, () => []).add(task);
   }
 
-  final userId = Supabase.instance.client.auth.currentUser!.id;
+  final user = Supabase.instance.client.auth.currentUser;
+  if (user == null) return;
+  final userId = user.id;
   final client = Supabase.instance.client;
 
   for (var entry in grouped.entries) {

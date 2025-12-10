@@ -17,8 +17,12 @@ class PatternNotifier extends StateNotifier<AsyncValue<List<Pattern>>> {
 
   Future<void> _loadPatterns() async {
     try {
-      final userId = client.auth.currentUser!.id;
-      final response = await client.from('patterns').select().eq('user_id', userId);
+      final user = client.auth.currentUser;
+      if (user == null) {
+        state = const AsyncValue.data([]);
+        return;
+      }
+      final response = await client.from('patterns').select().eq('user_id', user.id);
       final patterns = response.map((json) => Pattern.fromJson(json)).toList();
       state = AsyncValue.data(patterns);
     } catch (e, stack) {
@@ -30,8 +34,8 @@ class PatternNotifier extends StateNotifier<AsyncValue<List<Pattern>>> {
     try {
       await client.from('patterns').insert(pattern.toJson());
       _loadPatterns();
-    } catch (e) {
-      // Handle error
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
   }
 
@@ -39,8 +43,8 @@ class PatternNotifier extends StateNotifier<AsyncValue<List<Pattern>>> {
     try {
       await client.from('patterns').update(updatedPattern.toJson()).eq('id', updatedPattern.id);
       _loadPatterns();
-    } catch (e) {
-      // Handle error
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
   }
 
@@ -48,8 +52,8 @@ class PatternNotifier extends StateNotifier<AsyncValue<List<Pattern>>> {
     try {
       await client.from('patterns').delete().eq('id', patternId);
       _loadPatterns();
-    } catch (e) {
-      // Handle error
+    } catch (e, stack) {
+      state = AsyncValue.error(e, stack);
     }
   }
 }

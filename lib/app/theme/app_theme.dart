@@ -9,14 +9,14 @@ class AppTheme {
       colorScheme: cs,
       useMaterial3: true,
     ).copyWith(
-      scaffoldBackgroundColor: cs.background,
+      scaffoldBackgroundColor: cs.surface,
       textTheme: AppTextTheme.lightTextTheme,
       appBarTheme: AppBarTheme(
         elevation: 0,
         centerTitle: true,
         scrolledUnderElevation: 0,
-        backgroundColor: cs.background,
-        foregroundColor: cs.onBackground,
+        backgroundColor: cs.surface,
+        foregroundColor: cs.onSurface,
       ),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
@@ -26,7 +26,7 @@ class AppTheme {
         filled: true,
         fillColor: cs.surface,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        labelStyle: TextStyle(color: cs.onSurface.withOpacity(0.7)),
+        labelStyle: TextStyle(color: cs.onSurface.withValues(alpha: 0.7)),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -39,7 +39,7 @@ class AppTheme {
           elevation: 0,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: cs.surface,
         elevation: 1,
         shape: RoundedRectangleBorder(
@@ -54,12 +54,12 @@ class AppTheme {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: cs.surface,
-        indicatorColor: cs.primary.withOpacity(0.15),
+        indicatorColor: cs.primary.withValues(alpha: 0.15),
         labelTextStyle: WidgetStatePropertyAll(TextStyle(color: cs.onSurface)),
       ),
       chipTheme: ChipThemeData(
         backgroundColor: cs.secondaryContainer,
-        selectedColor: cs.primary.withOpacity(0.2),
+        selectedColor: cs.primary.withValues(alpha: 0.2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         labelStyle: TextStyle(color: cs.onSurface, fontWeight: FontWeight.w500),
       ),
@@ -72,14 +72,14 @@ class AppTheme {
       colorScheme: cs,
       useMaterial3: true,
     ).copyWith(
-      scaffoldBackgroundColor: cs.background,
+      scaffoldBackgroundColor: cs.surface,
       textTheme: AppTextTheme.darkTextTheme,
       appBarTheme: AppBarTheme(
         elevation: 0,
         centerTitle: true,
         scrolledUnderElevation: 0,
-        backgroundColor: cs.background,
-        foregroundColor: cs.onBackground,
+        backgroundColor: cs.surface,
+        foregroundColor: cs.onSurface,
       ),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
@@ -89,7 +89,7 @@ class AppTheme {
         filled: true,
         fillColor: cs.surface,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        labelStyle: TextStyle(color: cs.onSurface.withOpacity(0.7)),
+        labelStyle: TextStyle(color: cs.onSurface.withValues(alpha: 0.7)),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -102,7 +102,7 @@ class AppTheme {
           elevation: 0,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: cs.surface,
         elevation: 1,
         shape: RoundedRectangleBorder(
@@ -117,12 +117,12 @@ class AppTheme {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: cs.surface,
-        indicatorColor: cs.primary.withOpacity(0.2),
+        indicatorColor: cs.primary.withValues(alpha: 0.2),
         labelTextStyle: WidgetStatePropertyAll(TextStyle(color: cs.onSurface)),
       ),
       chipTheme: ChipThemeData(
         backgroundColor: cs.secondaryContainer,
-        selectedColor: cs.primary.withOpacity(0.2),
+        selectedColor: cs.primary.withValues(alpha: 0.2),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         labelStyle: const TextStyle(color: AppColors.textPrimary),
       ),

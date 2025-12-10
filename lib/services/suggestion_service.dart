@@ -162,7 +162,11 @@ String _buildReason({
 
 Future<(List<Suggestion>, Map<String, String>)> generateSuggestionsV1(Ref ref, {int limit = 8}) async {
   final client = Supabase.instance.client;
-  final userId = client.auth.currentUser!.id;
+  final user = client.auth.currentUser;
+  if (user == null) {
+    return (<Suggestion>[], <String, String>{});
+  }
+  final userId = user.id;
   final loc = tz.local;
   final now = tz.TZDateTime.now(loc);
 

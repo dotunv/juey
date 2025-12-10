@@ -52,10 +52,20 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
 
   Future<void> _save() async {
     if (!_form.currentState!.validate()) return;
+    if (!mounted) return;
     setState(() => _saving = true);
     try {
       if (widget.initial == null) {
-        final userId = Supabase.instance.client.auth.currentUser!.id;
+        final user = Supabase.instance.client.auth.currentUser;
+        if (user == null) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Please sign in to add tasks')),
+            );
+          }
+          return;
+        }
+        final userId = user.id;
         final newTask = Task(
           id: '',
           title: _titleController.text.trim(),
@@ -76,8 +86,12 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
       }
       HapticFeedback.lightImpact();
       if (mounted) Navigator.of(context).pop();
-    } catch (_) {
-      // ignore
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error saving task: $e')),
+        );
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -104,7 +118,7 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
                   IconButton(
                     tooltip: _showDescription ? 'Hide description' : 'Add description',
                     onPressed: () => setState(() => _showDescription = !_showDescription),
-                    icon: Icon(_showDescription ? Icons.subject : Icons.notes, color: cs.onSurface.withOpacity(0.8)),
+                    icon: Icon(_showDescription ? Icons.subject : Icons.notes, color: cs.onSurface.withValues(alpha: 0.8)),
                   ),
                   IconButton(
                     tooltip: 'Close',
@@ -130,14 +144,19 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
                 ),
               ],
               const SizedBox(height: 12),
-              if (tagAsync.hasValue && tagAsync.value!.isNotEmpty) ...[
-                Text('Tags', style: Theme.of(context).textTheme.titleLarge),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    for (final tag in tagAsync.value!)
-                      FilterChip(
+              tagAsync.when(
+                data: (tags) {
+                  if (tags.isEmpty) return const SizedBox.shrink();
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Tags', style: Theme.of(context).textTheme.titleLarge),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: [
+                          for (final tag in tags)
+                            FilterChip(
                         label: Text(tag.name),
                         selected: _selectedTagIds.contains(tag.id),
                         onSelected: (s) => setState(() {
@@ -147,10 +166,15 @@ class _QuickAddSheetState extends ConsumerState<QuickAddSheet> {
                             _selectedTagIds.remove(tag.id);
                           }
                         }),
-                      )
-                  ],
-                ),
-              ],
+                            )
+                        ],
+                      ),
+                    ],
+                  );
+                },
+                loading: () => const SizedBox.shrink(),
+                error: (_, __) => const SizedBox.shrink(),
+              ),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
